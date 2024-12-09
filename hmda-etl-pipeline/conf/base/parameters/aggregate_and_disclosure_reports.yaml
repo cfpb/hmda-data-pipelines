@@ -1,0 +1,9 @@
+aggregate_reports_path_for_year_{year}: ${globals:reports_path_prefix}/aggregate/{year}/aggregate_reports
+
+disclosure_reports_path_for_year_{year}: ${globals:reports_path_prefix}/disclosure/{year}/disclosure_reports
+
+report_{year}: {year}
+
+skip_existing_reports: "${runtime_params:skip_existing_reports, True}"
+use_lei_list: "${runtime_params:use_lei_list, False}"
+use_msa_list: "${runtime_params:use_msa_list, False}"

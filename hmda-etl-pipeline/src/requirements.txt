@@ -1,0 +1,21 @@
+kedro == 0.19.9
+kedro-datasets
+numpy == 1.26.4
+black
+ruff
+pandas == 1.5.3
+kedro-viz
+psycopg2-binary
+sqlalchemy<2.0
+ipykernel
+pyarrow
+pytest
+pytest-cov
+jupyter
+requests>=2.31.0 #fix medium CVE
+aiohttp
+s3fs
+certifi>=2023.07.22 #fix critical CVE
+wheel>=0.38.1 # fix high
+cryptography>=39.0.1  #fix high CVE
+urllib3>=1.26.18 #fix high CVE

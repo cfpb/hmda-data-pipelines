@@ -1,0 +1,8 @@
+hmda-etl-pipeline/conf/base/credentials.yaml 
+hmda-etl-pipeline/conf/dev/credentials.yaml 
+hmda-etl-pipeline/conf/dev/data_paths.yaml
+hmda-etl-pipeline/conf/dev/env_config.yaml
+hmda-etl-pipeline/data
+hmda-etl-pipeline/logs
+hmda-etl-pipeline/src/tests
+**/__pycache__/

@@ -1,0 +1,66 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: kedro-etl-pipeline-job-regulator-lar-2023
+  labels:
+    job: kedro-etl-pipeline-job-regulator-lar-2023
+spec:
+  template:
+    spec:
+      securityContext:
+        fsGroup: 999
+      containers:
+        - name: kedro
+          image: hmda-ecr/hmda/kedro-etl-pipeline:latest_image
+          env:
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: kedro-aws-credentials
+                  key: aws-access-key-id
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: kedro-aws-credentials
+                  key: aws-secret-access-key
+            - name: AWS_DEFAULT_REGION
+              value: "us-east-1"
+            - name: CURRENT_YEAR
+              value: "2023_Filing_Season"
+            - name: PARAMS
+              value: "max_workers=6"
+            - name: TO_OUTPUTS
+              value: "regulator_lar_flat_file_2023"
+            - name: KEDRO_DEV
+              value: dev
+            - name: STD_ARGS
+              value: "--tags=\"$(CURRENT_YEAR)\" --env=$(KEDRO_DEV) --runner=ThreadRunner --params=$(PARAMS) --to-outputs=$(TO_OUTPUTS)"
+            - name: SQLALCHEMY_SILENCE_UBER_WARNING
+              value: "1"
+          volumeMounts:
+            - name: kedro-base-credentials
+              readOnly: true
+              mountPath: /tmp/kedro-base-credentials
+            - name: kedro-dev-credentials
+              readOnly: true
+              mountPath: /tmp/kedro-dev-credentials
+            - name: kedro-dev-env-configmap
+              readOnly: true
+              mountPath: /tmp/kedro-dev-env-configmap
+          command: ["/bin/bash", "-c",
+                    "/tmp/setup-job.sh && cd /hmda-etl-pipeline/ && kedro run $(STD_ARGS) --pipeline=data_publisher"]
+      volumes:
+        - name: kedro-base-credentials
+          secret:
+            secretName: kedro-base-credentials
+        - name: kedro-dev-credentials
+          secret:
+            secretName: kedro-dev-credentials
+        - name: kedro-dev-env-configmap
+          configMap:
+            name: kedro-dev-env-configmap
+      tolerations:
+        - key: node-group
+          operator: Equal
+          value: kedro-large
+      restartPolicy: OnFailure

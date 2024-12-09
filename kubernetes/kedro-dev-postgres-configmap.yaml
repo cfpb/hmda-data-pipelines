@@ -1,0 +1,85 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: kedro-dev-postgres-configmap
+data:
+  dev_postgres.yaml : |-
+    # These are datasets that come from our Dev Postgres database.
+
+    # LAR count by LEI is included within this file, but it may make more sense for this
+    # dataset to exist within the initial_could_validation.yaml file. 
+
+    {% for year in [2019, 2020, 2021, 2022, 2023] %}
+
+      # This file is the same for all years before 2024
+      pg_cbsa_county_name_{{ year }}:
+        type: pandas.SQLQueryDataSet
+        sql: "SELECT * FROM hmda_user.cbsa_county_name;"
+        credentials: dev_pg_readonly
+        layer: Dev Postgres
+
+      pg_lar_{{ year }}:
+        type: pandas.SQLQueryDataSet
+        sql: "SELECT * FROM hmda_user.restore_nightly_loanapplicationregister{{ year }};"
+        load_args:
+          chunksize: 250000
+        credentials: dev_pg_readonly
+        layer: Dev Postgres
+
+      # The institutions email table is a single table used for all years. Appending
+      # the year to the end of the Kedro dataset name for consistency
+      pg_institutions_email_domains_{{ year }}:
+        type: pandas.SQLQueryDataSet
+        sql: "SELECT * FROM hmda_user.restore_nightly_institutions_emails_2018;"
+        credentials: dev_pg_readonly
+        layer: Dev Postgres
+
+      # This dataset is cached because it is used twice. Once to verify the row counts
+      # and a second time to calculate the number of partitions in the raw LAR dataset
+      pg_lar_counts_by_lei_{{ year }}:
+        type: CachedDataSet
+        dataset:
+          type: pandas.SQLQueryDataSet
+          sql: "SELECT lei, COUNT(*) FROM hmda_user.restore_nightly_loanapplicationregister{{ year }} GROUP BY lei;"
+          credentials: dev_pg_readonly
+        layer: Dev Postgres
+
+      pg_institutions_{{ year }}:
+        type: pandas.SQLQueryDataSet
+        sql: "SELECT * FROM hmda_user.restore_nightly_institutions{{ year }};"
+        credentials: dev_pg_readonly
+        layer: Dev Postgres
+
+      pg_ts_{{ year }}:
+        type: pandas.SQLQueryDataSet
+        sql: "SELECT * FROM hmda_user.restore_nightly_transmittalsheet{{ year }};"
+        credentials: dev_pg_readonly
+        layer: Dev Postgres
+
+    {% for quarter in ["q1", "q2", "q3"] %}
+
+      pg_lar_{{ year }}_{{ quarter }}:
+        type: pandas.SQLQueryDataSet
+        sql: "SELECT * FROM hmda_user.lar{{ year }}_{{ quarter }};"
+        load_args:
+          chunksize: 250000
+        credentials: dev_pg_readonly
+        layer: Dev Postgres
+
+      pg_lar_counts_by_lei_{{ year }}_{{ quarter }}:
+        type: CachedDataSet
+        dataset:
+          type: pandas.SQLQueryDataSet
+          sql: "SELECT lei, COUNT(*) FROM hmda_user.lar{{ year }}_{{ quarter }} GROUP BY lei;"
+          credentials: dev_pg_readonly
+        layer: Dev Postgres
+
+      pg_ts_{{ year }}_{{ quarter }}:
+        type: pandas.SQLQueryDataSet
+        sql: "SELECT * FROM hmda_user.ts{{ year }}_{{ quarter }};"
+        credentials: dev_pg_readonly
+        layer: Dev Postgres
+
+    {% endfor %}
+      
+    {% endfor %}

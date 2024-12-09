@@ -1,0 +1,136 @@
+# These datasets are the "earliest" stage at which the raw data is typed. 
+# At this stage the data exists in Parquet format. TS and Institutions 
+# are are stored as single files 
+
+# TODO: IS THERE A WAY TO CONDITIONALLY APPLY CREDENTIALS?
+# credentials must be supplied when writing to S3 but aren't used or
+# needed when the environment is local and files are written to disc. 
+# example:
+#   credentials: aws_cfpb_platform_archive
+
+state_county_mapping_{year}:
+  type: pandas.CSVDataset
+  filepath: ${globals:reports_path_prefix}/{year}/state_county_mapping.csv
+  save_args:
+    sep: ','
+  load_args:
+    sep: ','
+  metadata:
+    kedro-viz:
+      layer: Raw Typed
+
+lar_raw_parquets_{year}:
+  type: hmda_etl_pipeline.extras.datasets.hmda_partitioned_dataset.HMDAPartitionedDataset
+  path: ${globals:regulator_path_prefix}/{year}/lar/01_raw/latest
+  credentials: ${globals:credentials}
+  overwrite: True
+  dataset:
+    type: pandas.ParquetDataset
+    save_args:
+      engine: pyarrow
+      compression: gzip
+    load_args:
+      engine: pyarrow
+  filename_suffix: ".parquet"
+  metadata:
+    kedro-viz:
+      layer: Raw Typed
+
+public_modified_lar_raw_parquets_{year}:
+  type: hmda_etl_pipeline.extras.datasets.hmda_partitioned_dataset.HMDAPartitionedDataset
+  path: ${globals:public_path_prefix}/{year}/modified_lar/01_raw/latest
+  credentials: ${globals:credentials}
+  overwrite: True
+  dataset:
+    type: pandas.ParquetDataset
+    save_args:
+      engine: pyarrow
+      compression: gzip
+    load_args:
+      engine: pyarrow
+  filename_suffix: ".parquet"
+  metadata:
+    kedro-viz:
+      layer: Raw Typed
+
+combined_modified_lar_raw_parquets_{year}:
+  type: hmda_etl_pipeline.extras.datasets.hmda_partitioned_dataset.HMDAPartitionedDataset
+  path: ${globals:public_path_prefix}/{year}/combined_mlar/01_raw/latest
+  credentials: ${globals:credentials}
+  overwrite: True
+  dataset:
+    type: pandas.ParquetDataset
+    save_args:
+      engine: pyarrow
+      compression: gzip
+    load_args:
+      engine: pyarrow
+  filename_suffix: ".parquet"
+  metadata:
+    kedro-viz:
+      layer: Raw Typed
+
+institutions_email_domains_raw_parquet_{year}:
+  type: hmda_etl_pipeline.extras.datasets.hmda_parquet_dataset.HMDAParquetDataset
+  filepath: ${globals:regulator_path_prefix}/{year}/institutions/01_raw/latest/email_domains.parquet
+  credentials: ${globals:credentials}
+  save_args:
+    engine: pyarrow
+  load_args:
+    engine: pyarrow
+  metadata:
+    kedro-viz:
+      layer: Raw Typed
+
+institutions_raw_parquet_{year}:
+  type: hmda_etl_pipeline.extras.datasets.hmda_parquet_dataset.HMDAParquetDataset
+  filepath: ${globals:regulator_path_prefix}/{year}/institutions/01_raw/latest/institutions.parquet
+  credentials: ${globals:credentials}
+  save_args:
+    engine: pyarrow
+  load_args:
+    engine: pyarrow
+  metadata:
+    kedro-viz:
+      layer: Raw Typed
+
+ts_raw_parquet_{year}:
+  type: hmda_etl_pipeline.extras.datasets.hmda_parquet_dataset.HMDAParquetDataset
+  filepath: ${globals:regulator_path_prefix}/{year}/ts/01_raw/latest/ts.parquet
+  credentials: ${globals:credentials}
+  save_args:
+    engine: pyarrow
+  load_args:
+    engine: pyarrow
+  metadata:
+    kedro-viz:
+      layer: Raw Typed
+
+lar_raw_parquets_{year}_{quarter}:
+  type: hmda_etl_pipeline.extras.datasets.hmda_partitioned_dataset.HMDAPartitionedDataset
+  path: ${globals:regulator_path_prefix}/{year}/lar/01_raw/{quarter}/latest
+  credentials: ${globals:credentials}
+  overwrite: True
+  dataset:
+    type: pandas.ParquetDataset
+    save_args:
+      engine: pyarrow
+      compression: gzip
+    load_args:
+      engine: pyarrow
+  filename_suffix: ".parquet"
+  metadata:
+    kedro-viz:
+      layer: Raw Typed
+
+ts_raw_parquet_{year}_{quarter}:
+  type: hmda_etl_pipeline.extras.datasets.hmda_parquet_dataset.HMDAParquetDataset
+  filepath: ${globals:regulator_path_prefix}/{year}/ts/01_raw/latest/ts_{quarter}.parquet
+  credentials: ${globals:credentials}
+  save_args:
+    engine: pyarrow
+  load_args:
+    engine: pyarrow
+  metadata:
+    kedro-viz:
+      layer: Raw Typed

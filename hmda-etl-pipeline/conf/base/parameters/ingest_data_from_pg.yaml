@@ -1,0 +1,192 @@
+# This is a mapping of data types for LAR, TS, and Panel postgres
+# tables. These are supplied as parameters to the nodes responsible
+# for persisting the raw data to parquet files. 
+
+# Note: there are typos within pg_lar_dtypes. These are corrected when
+# writing the parquet file
+
+pg_lar_dtypes:
+  id: int8
+  lei: str
+  uli: str
+  application_date: float # later parsed to date
+  loan_type: int8
+  loan_purpose: int8
+  preapproval: int8
+  construction_method: int8
+  occupancy_type: int8
+  loan_amount: float
+  action_taken_type: int8
+  action_taken_date: int32 # later parsed to date
+  street: str
+  city: str
+  state: str
+  zip: str
+  county: str
+  tract: str
+  ethnicity_applicant_1: Int8
+  ethnicity_applicant_2: Int8
+  ethnicity_applicant_3: Int8
+  ethnicity_applicant_4: Int8
+  ethnicity_applicant_5: Int8
+  other_hispanic_applicant: str
+  ethnicity_co_applicant_1: Int8
+  ethnicity_co_applicant_2: Int8
+  ethnicity_co_applicant_3: Int8
+  ethnicity_co_applicant_4: Int8
+  ethnicity_co_applicant_5: Int8
+  other_hispanic_co_applicant: str
+  ethnicity_observed_applicant: int8
+  ethnicity_observed_co_applicant: int8
+  race_applicant_1: Int8
+  race_applicant_2: Int8
+  race_applicant_3: Int8
+  race_applicant_4: Int8
+  race_applicant_5: Int8
+  other_native_race_applicant: str
+  other_asian_race_applicant: str
+  other_pacific_race_applicant: str
+  race_co_applicant_1: Int8
+  race_co_applicant_2: Int8
+  race_co_applicant_3: Int8
+  race_co_applicant_4: Int8
+  race_co_applicant_5: Int8
+  other_native_race_co_applicant: str
+  other_asian_race_co_applicant: str
+  other_pacific_race_co_applicant: str
+  race_observed_applicant: int8
+  race_observed_co_applicant: int8
+  sex_applicant: int8
+  sex_co_applicant: int8
+  observed_sex_applicant: int8 
+  observed_sex_co_applicant: int8
+  age_applicant: int16
+  age_co_applicant: int16
+  income: float64
+  purchaser_type: int8
+  rate_spread: str
+  hoepa_status: int8
+  lien_status: int8
+  credit_score_applicant: int16
+  credit_score_co_applicant: int16
+  credit_score_type_applicant: int16
+  credit_score_model_applicant: str
+  credit_score_type_co_applicant: int16
+  credit_score_model_co_applicant: str
+  denial_reason1: int16
+  denial_reason2: Int16
+  denial_reason3: Int16
+  denial_reason4: Int16
+  other_denial_reason: str
+  total_loan_costs: str
+  total_points: str
+  origination_charges: str
+  discount_points: str
+  lender_credits: str
+  interest_rate: str
+  payment_penalty: str
+  debt_to_incode: str
+  loan_value_ratio: str
+  loan_term: str
+  rate_spread_intro: str 
+  baloon_payment: int16
+  insert_only_payment: int16
+  amortization: int16
+  other_amortization: int16
+  property_value: str
+  home_security_policy: int16
+  lan_property_interest: int16
+  total_uits: int16
+  mf_affordable: str
+  application_submission: int16 
+  payable: int16
+  nmls: str
+  aus1: int16
+  aus2: Int8
+  aus3: Int8
+  aus4: Int8
+  aus5: Int8
+  other_aus: str 
+  aus1_result: int16
+  aus2_result: Int8
+  aus3_result: Int8
+  aus4_result: Int8
+  aus5_result: Int8
+  other_aus_result: str 
+  reverse_mortgage: int16
+  line_of_credits: int16
+  business_or_commercial: int16
+  conforming_loan_limit: str
+  ethnicity_categorization: str
+  race_categorization: str
+  sex_categorization: str
+  dwelling_categorization: str 
+  loan_product_type_categorization: str 
+  tract_population: int16
+  tract_minority_population_percent: float
+  ffiec_msa_md_median_family_income: int32
+  tract_owner_occupied_units: int32
+  tract_one_to_four_family_homes: int32
+  tract_median_age_of_housing_units: int16
+  tract_to_msa_income_percentage: float
+  is_quarterly: bool
+  created_at: str
+  msa_md: str
+  msa_md_name: str
+  checksum: str
+
+pg_ts_dtypes:
+  id: int8
+  institution_name: str
+  year: int16
+  quarter: int16
+  name: str
+  phone: str
+  email: str
+  street: str
+  city: str
+  state: str
+  zip_code: str
+  agency: int8
+  total_lines: int32
+  tax_id: str
+  lei: str
+  created_at: datetime64[ns]
+  submission_id: str
+  is_quarterly: bool
+  sign_date: int64 # later converted to datetime
+
+pg_institutions_email_domains_dtypes:
+  id: int8
+  lei: str
+  email_domain: str
+
+pg_institutions_dtypes:
+  lei: str
+  activity_year: int16 
+  agency: int8
+  institution_type: int8 
+  id2017: str
+  tax_id: str
+  rssd: int32
+  respondent_name: str 
+  respondent_state: str
+  respondent_city: str
+  parent_id_rssd: int32
+  parent_name: str
+  assets: int64
+  other_lender_code: int8 
+  topholder_id_rssd: int32
+  topholder_name: str
+  hmda_filer: bool
+  quarterly_filer: bool
+  quarterly_filer_has_filed_q1: bool
+  quarterly_filer_has_filed_q2: bool
+  quarterly_filer_has_filed_q3: bool
+  notes: str
+
+pg_state_county_dtypes:
+  county_name: str
+  state_name: str
+  state_code: int16
+  county_code: int16

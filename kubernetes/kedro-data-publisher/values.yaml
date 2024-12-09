@@ -1,0 +1,121 @@
+# Default values for kedro-data-publisher.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# Use cron job template yaml
+runCronJobs: true
+# Use job template yaml
+runJob: false
+
+# Job template variables to be updated with --set in helm command for one-time job runs
+jobName: "panel"
+nodeGroup: "kedro-regular" # Use kedro-large for MLAR and LAR datasets
+output: "institutions_flat_file" # Output filename not including the year
+year: "2023" # For quarterly datasets, add quarter like "2024_q1"
+pipeline: "__default__" # Default is "__default__" which runs all pieplines needed to get the output. Set to "data_publisher" to skip reading from pg
+post_to_mm: true # Default is true
+post_to_mm_verbose: false # Default is false
+
+image:
+  repository: hmda-ecr/hmda/kedro-etl-pipeline
+  pullPolicy: Always
+  imagePullPolicy: Always
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: "combined_mlar_v2"
+
+cronJobs:
+  # # SPECIFIC_LAR_SCHEDULE_CRON: 0 0 0 23 4 ? 2079
+  # # SPECIFIC_LAR_SCHEDULE_YEARS: "2023"
+  # regulator-lar:
+  #   nodeGroup: "kedro-large"
+  #   output: "regulator_lar_flat_file"
+  #   schedule: "0 0 23 4 *"
+  #   years: [2023]
+
+  # # SPECIFIC_PANEL_SCHEDULE_CRON: 0 0 0 23 4 ? 2079
+  # # SPECIFIC_PANEL_SCHEDULE_YEARS: "2023"
+  # panel:
+  #   nodeGroup: "kedro-regular"
+  #   output: "institutions_flat_file"
+  #   schedule: "0 0 23 4 *"
+  #   years: [2023]
+
+  # # SPECIFIC_TS_SCHEDULE_CRON: 0 0 0 23 4 ? 2079
+  # # SPECIFIC_TS_SCHEDULE_YEARS: "2023"
+  # regulator-ts:
+  #   nodeGroup: "kedro-regular"
+  #   output: "regulator_ts_flat_file"
+  #   schedule: "0 0 23 4 *"
+  #   years: [2023]
+
+  # COMBINED_MLAR_PUBLIC_SCHEDULE_CRON: 0 00 16 ? * SUN *
+  # COMBINED_MLAR_PUBLIC_SCHEDULE_YEARS: "2022,2023"
+  combined-modified-lar:
+    nodeGroup: "kedro-large"
+    output: "combined_modified_lar_noheader_flat_file"
+    schedule: "0 16 * * 0"
+    years: [2022, 2023]
+
+  # LAR_LOAN_LIMIT_SCHEDULE_CRON: 0 10 5 ? * MON *
+  # LAR_LOAN_LIMIT_SCHEDULE_YEARS: 2021,2022,2023
+  lar-loan-limit:
+    nodeGroup: "kedro-large"
+    output: "lar_loan_limit_flat_file"
+    schedule: "10 5 * * 1"
+    years: [2021, 2022, 2023]
+
+  # LAR_PUBLIC_SCHEDULE_CRON: 0 00 10 ? * SUN *
+  # LAR_PUBLIC_SCHEDULE_YEARS: 2021,2022,2023
+  modified-lar:
+    nodeGroup: "kedro-large"
+    output: "public_modified_lar_flat_file"
+    schedule: "0 10 * * 0"
+    years: [2021, 2022, 2023]
+
+  # LAR_QUARTERLY_SCHEDULE_CRON: 0 30 5 * * ?
+  # LAR_QUARTERLY_SCHEDULE_YEARS: "2024"
+  regulator-lar-quarterly:
+    nodeGroup: "kedro-large"
+    output: "regulator_lar_flat_file"
+    schedule: "30 5 * * *"
+    years: ["2024_q1", "2024_q2", "2024_q3"]
+
+  # LAR_SCHEDULE_CRON: 0 00 14 ? * SUN *
+  # LAR_SCHEDULE_YEARS: 2021,2022,2023
+  regulator-lar:
+    nodeGroup: "kedro-large"
+    output: "regulator_lar_flat_file"
+    schedule: "00 14 * * 0"
+    years: [2021, 2022, 2023]
+
+  # PANEL_SCHEDULE_CRON: 0 10 8 ? * SUN *
+  # PANEL_SCHEDULE_YEARS: 2021,2022,2023
+  panel:
+    nodeGroup: "kedro-regular"
+    output: "institutions_flat_file"
+    schedule: "10 8 * * 0"
+    years: [2021, 2022, 2023]
+
+  # TS_PUBLIC_SCHEDULE_CRON: 0 00 8 ? * SUN *
+  # TS_PUBLIC_SCHEDULE_YEARS: 2021,2022,2023
+  public-ts:
+    nodeGroup: "kedro-regular"
+    output: "public_ts_flat_file"
+    schedule: "0 8 * * 0"
+    years: [2021, 2022, 2023]
+
+  # TS_SCHEDULE_CRON: 0 00 7 ? * SUN *
+  # TS_SCHEDULE_YEARS: 2021,2022,2023
+  regulator-ts:
+    nodeGroup: "kedro-regular"
+    output: "regulator_ts_flat_file"
+    schedule: "0 7 * * 0"
+    years: [2021, 2022, 2023]
+
+  # TS_QUARTERLY_SCHEDULE_CRON: 0 20 5 * * ?
+  # TS_QUARTERLY_SCHEDULE_YEARS: "2024"
+  regulator-ts-quarterly:
+    nodeGroup: "kedro-regular"
+    output: "regulator_ts_flat_file"
+    schedule: "20 5 * * *"
+    years: ["2024_q1", "2024_q2", "2024_q3"]

@@ -1,0 +1,7 @@
+# This is the path prefix where data will be written. For local dev this
+# is just set to `data/` within hmda-etl-pipeline directory of this repo
+regulator_path_prefix: data/regulator
+archive_public_path_prefix: data/archive-public
+public_path_prefix: data/public
+reports_path_prefix: data/reports
+credentials: False

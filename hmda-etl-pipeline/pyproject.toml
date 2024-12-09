@@ -1,0 +1,17 @@
+[tool.kedro]
+package_name = "hmda_etl_pipeline"
+project_name = "hmda_etl_pipeline"
+kedro_init_version = "0.19.9"
+
+[tool.isort]
+profile = "black"
+
+[tool.pytest.ini_options]
+addopts = """
+--cov-report term-missing \
+--cov src/hmda_etl_pipeline -ra"""
+
+[tool.coverage.report]
+fail_under = 0
+show_missing = true
+exclude_lines = ["pragma: no cover", "raise NotImplementedError"]

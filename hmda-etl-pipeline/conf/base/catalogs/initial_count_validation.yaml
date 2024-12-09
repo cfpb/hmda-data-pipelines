@@ -1,0 +1,7 @@
+# These datasets are used to perform initial validation on the input data from postgres
+
+count_verification_passed_{year}:
+  type: MemoryDataset
+  metadata:
+    kedro-viz:
+      layer: Initial Count Validation

@@ -1,0 +1,54 @@
+# These datasets are those produced by the "Disclosure Reports" service. 
+
+aggregate_reports_{year}:
+  type: PartitionedDataset
+  path: ${globals:reports_path_prefix}/aggregate/{year}/aggregate_reports
+  overwrite: False # Don't remove old reports for skipped lei
+  dataset:
+    type: hmda_etl_pipeline.extras.datasets.hmda_json_dataset.HmdaJSONDataset
+    load_args:
+      lines: True
+  filename_suffix: ".json"
+  metadata:
+    kedro-viz:
+      layer: Aggregate and Disclosure Reports
+
+disclosure_reports_{year}:
+  type: PartitionedDataset
+  path: ${globals:reports_path_prefix}/disclosure/{year}/disclosure_reports
+  overwrite: False # Don't remove old reports for skipped lei
+  dataset:
+    type: hmda_etl_pipeline.extras.datasets.hmda_json_dataset.HmdaJSONDataset
+    load_args:
+      lines: True
+  filename_suffix: ".json"
+  metadata:
+    kedro-viz:
+      layer: Aggregate and Disclosure Reports
+
+lei_list_disclosure_{year}:
+  type: pandas.CSVDataset
+  filepath: ${globals:reports_path_prefix}/disclosure/{year}/lei_list.csv
+  load_args:
+    names: ["lei"]
+  metadata:
+    kedro-viz:
+      layer: Aggregate and Disclosure Reports
+
+lei_list_aggregate_{year}:
+  type: pandas.CSVDataset
+  filepath: ${globals:reports_path_prefix}/aggregate/{year}/lei_list.csv
+  load_args:
+    names: ["lei"]
+  metadata:
+    kedro-viz:
+      layer: Aggregate and Disclosure Reports
+
+msa_list_{year}:
+  type: pandas.CSVDataset
+  filepath: ${globals:reports_path_prefix}/aggregate/{year}/msa_list.csv
+  load_args:
+    names: ["msa_md"]
+  metadata:
+    kedro-viz:
+      layer: Aggregate and Disclosure Reports

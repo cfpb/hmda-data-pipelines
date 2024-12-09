@@ -1,0 +1,7 @@
+# this file needs to be populated. It should contain the same keys as
+# data_paths.yaml within conf/local but point towards an s3 bucket
+regulator_path_prefix: s3://cfpb-hmda-export/dev/kedro-etl-pipeline/regulator
+archive_public_path_prefix: s3://cfpb-hmda-export/dev/kedro-etl-pipeline/archive-public
+public_path_prefix: s3://cfpb-hmda-export/dev/kedro-etl-pipeline/public
+reports_path_prefix: s3://cfpb-hmda-export/dev/kedro-etl-pipeline/reports
+credentials: aws_cfpb_hmda_export

@@ -1,0 +1,236 @@
+# These datasets are those produced by the "Data Publisher" service. 
+# This includes regulator datasets for LAR, TS, and Panel, as well as
+# public datasets such as Modified LAR, and redacted TS. 
+
+regulator_lar_flat_file_{year}:
+  type: pandas.CSVDataset
+  filepath: ${globals:regulator_path_prefix}/{year}/lar/02_data_publication/${YYYYMMDD:}-{year}_lar.txt
+  save_args:
+    index: False
+    sep: '|'
+    float_format: '%.2f'
+    chunksize: 500000
+    header: False
+    date_format: '%Y%m%d'
+    na_rep: ''
+  load_args:
+    sep: '|'
+  metadata:
+    kedro-viz:
+      layer: Data Publisher - Regulator
+
+reduced_lar_reports_parquet_{year}:
+  type: hmda_etl_pipeline.extras.datasets.hmda_parquet_dataset.HMDAParquetDataset
+  filepath: ${globals:reports_path_prefix}/{year}/reduced_lar.parquet
+  credentials: ${globals:credentials}
+  save_args:
+    engine: pyarrow
+  load_args:
+    engine: pyarrow
+  metadata:
+    kedro-viz:
+      layer: Data Publisher - Reports
+
+lar_loan_limit_flat_file_{year}:
+  type: pandas.CSVDataset
+  filepath: ${globals:regulator_path_prefix}/{year}/lar/02_data_publication/{year}F_AGY_LAR_withFlag_${YYYYMMDD:}-{year}_lar.txt
+  save_args:
+    index: False
+    sep: '|'
+    float_format: '%.2f'
+    chunksize: 500000
+    date_format: '%Y%m%d'
+    na_rep: ''
+  load_args:
+    sep: '|'
+  metadata:
+    kedro-viz:
+      layer: Data Publisher - Regulator
+
+combined_modified_lar_header_flat_file_{year}:
+  type: pandas.CSVDataset
+  filepath: ${globals:public_path_prefix}/{year}/combined_mlar/header/02_data_publication/{year}_combined_mlar_header.zip
+  save_args:
+    index: False
+    sep: '|'
+    float_format: '%.2f'
+    na_rep: ''
+    compression:
+      method: zip
+      archive_name: "{year}_combined_mlar_header.txt"
+  load_args:
+    sep: '|'
+    compression:
+      method: zip
+  metadata:
+    kedro-viz:
+      layer: Data Publisher - Public
+
+combined_modified_lar_noheader_flat_file_{year}:
+  type: pandas.CSVDataset
+  filepath: ${globals:public_path_prefix}/{year}/combined_mlar/02_data_publication/{year}_combined_mlar.zip
+  save_args:
+    index: False
+    header: False
+    sep: '|'
+    float_format: '%.2f'
+    na_rep: ''
+    compression:
+      method: zip
+      archive_name: "{year}_combined_mlar.txt"
+  load_args:
+    sep: '|'
+    compression:
+      method: zip
+  metadata:
+    kedro-viz:
+      layer: Data Publisher - Public
+
+public_modified_lar_flat_file_{year}:
+  type: pandas.CSVDataset
+  filepath: ${globals:public_path_prefix}/{year}/modified_lar/02_data_publication/{year}_lar.zip
+  save_args:
+    index: False
+    sep: '|'
+    float_format: '%.2f'
+    na_rep: ''
+    compression:
+      method: zip
+      archive_name: "{year}_lar.txt"
+  load_args:
+    sep: '|'
+    compression:
+      method: zip
+  metadata:
+    kedro-viz:
+      layer: Data Publisher - Public
+
+analyzed_mlar_flat_file_{year}:
+  type: pandas.CSVDataset
+  filepath: ${globals:regulator_path_prefix}/{year}/modified_lar/02_data_publication/{year}_lar_analyzed.zip
+  save_args:
+    index: False
+    sep: '|'
+    float_format: '%.2f'
+    na_rep: ''
+    compression:
+      method: zip
+      archive_name: "{year}_lar_analyzed.txt"
+  load_args:
+    sep: '|'
+    compression:
+      method: zip
+  metadata:
+    kedro-viz:
+      layer: Data Publisher - Regulator
+
+archive_public_modified_lar_flat_file_{year}:
+  type: pandas.CSVDataset
+  filepath: ${globals:archive_public_path_prefix}/{year}/modified_lar/02_data_publication/{year}_lar_${YYYYMMDD:}.zip
+  save_args:
+    index: False
+    sep: '|'
+    float_format: '%.2f'
+    na_rep: ''
+    compression:
+      method: zip
+      archive_name: "{year}_lar_${YYYYMMDD:}.txt"
+  load_args:
+    sep: '|'
+    compression:
+      method: zip
+  metadata:
+    kedro-viz:
+      layer: Data Publisher - Public
+
+institutions_flat_file_{year}:
+  type: hmda_etl_pipeline.extras.datasets.hmda_csv_dataset.HmdaCSVDataset
+  filepath: ${globals:regulator_path_prefix}/{year}/institutions/02_data_publication/latest_{year}_panel.txt
+  save_args:
+    index: False
+    header: False
+    sep: '|'
+    na_rep: ''
+  load_args:
+    header: null
+    sep: '|'
+  metadata:
+    kedro-viz:
+      layer: Data Publisher - Regulator
+
+regulator_ts_flat_file_{year}:
+  type: pandas.CSVDataset
+  filepath: ${globals:regulator_path_prefix}/{year}/ts/02_data_publication/${YYYYMMDD:}-{year}_ts.txt
+  save_args:
+    index: False
+    header: False
+    sep: '|'
+  load_args:
+    sep: '|'
+  metadata:
+    kedro-viz:
+      layer: Data Publisher - Regulator
+
+public_ts_flat_file_{year}:
+  type: pandas.CSVDataset
+  filepath: ${globals:public_path_prefix}/{year}/public_ts/02_data_publication/{year}_ts.zip
+  save_args:
+    index: False
+    sep: '|'
+    compression:
+      method: zip
+      archive_name: "{year}_ts.txt"
+  load_args:
+    sep: '|'
+    compression:
+      method: zip
+  metadata:
+    kedro-viz:
+      layer: Data Publisher - Public
+
+archive_public_ts_flat_file_{year}:
+  type: pandas.CSVDataset
+  filepath: ${globals:archive_public_path_prefix}/{year}/public_ts/02_data_publication/{year}_ts_${YYYYMMDD:}.zip
+  save_args:
+    index: False
+    sep: '|'
+    compression:
+      method: zip
+      archive_name: "{year}_ts_${YYYYMMDD:}.txt"
+  load_args:
+    sep: '|'
+    compression:
+      method: zip
+  metadata:
+    kedro-viz:
+      layer: Data Publisher - Public
+
+regulator_lar_flat_file_{year}_q{quarter}:
+  type: pandas.CSVDataset
+  filepath: ${globals:regulator_path_prefix}/{year}/lar/02_data_publication/${YYYYMMDD:}_quarter_{quarter}_{year}_lar.txt
+  save_args:
+    index: False
+    sep: '|'
+    float_format: '%.2f'
+    chunksize: 500000
+    header: False
+    date_format: '%Y%m%d'
+    na_rep: ''
+  load_args:
+    sep: '|'
+  metadata:
+    kedro-viz:
+      layer: Data Publisher - Regulator
+
+regulator_ts_flat_file_{year}_q{quarter}:
+  type: pandas.CSVDataset
+  filepath: ${globals:regulator_path_prefix}/{year}/ts/02_data_publication/${YYYYMMDD:}_quarter_{quarter}_{year}_ts.txt
+  save_args:
+    index: False
+    header: False
+    sep: '|'
+  load_args:
+    sep: '|'
+  metadata:
+    kedro-viz:
+      layer: Data Publisher - Regulator

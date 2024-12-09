@@ -1,0 +1,1 @@
+NA_LIST = ["", "NA", "nA", "Na", "na"]
