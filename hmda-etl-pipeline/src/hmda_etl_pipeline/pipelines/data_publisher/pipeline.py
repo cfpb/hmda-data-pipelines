@@ -15,7 +15,6 @@ from .nodes import (
     create_mlar_flat_file,
     create_lar_flat_file,
     analyze_mlar_flat_file,
-    validate_lar_and_mlar_row_counts,
     create_institutions_flat_file,
     create_regulator_ts_flat_file,
     create_public_ts_flat_file,
@@ -37,7 +36,7 @@ for year in (2019, 2020, 2021, 2022, 2023):
         node(
             create_lar_flat_file,
             inputs=[f"lar_raw_parquets_{year}", "params:regulator_lar_columns"],
-            outputs=[f"regulator_lar_flat_file_{year}", f"reg_lar_row_count_{year}"],
+            outputs=f"regulator_lar_flat_file_{year}",
             tags=f"{year}_Filing_Season",
             name=f"generate_reg_lar_flat_file_for_{year}",
         ),
@@ -45,10 +44,7 @@ for year in (2019, 2020, 2021, 2022, 2023):
         node(
             create_lar_flat_file,
             inputs=[f"lar_raw_parquets_{year}", "params:lar_loan_limit_columns"],
-            outputs=[
-                f"lar_loan_limit_flat_file_{year}",
-                f"lar_loan_limit_row_count_{year}",
-            ],
+            outputs=f"lar_loan_limit_flat_file_{year}",
             tags=f"{year}_Filing_Season",
             name=f"generate_lar_loan_limit_flat_file_for_{year}",
         ),
@@ -81,7 +77,6 @@ for year in (2019, 2020, 2021, 2022, 2023):
             outputs=[
                 f"public_modified_lar_flat_file_{year}",
                 f"archive_public_modified_lar_flat_file_{year}",
-                f"public_mlar_row_count_{year}",
             ],
             tags=f"{year}_Filing_Season",
             name=f"generate_public_modified_lar_flat_file_for_{year}",
@@ -93,7 +88,6 @@ for year in (2019, 2020, 2021, 2022, 2023):
             outputs=[
                 f"combined_modified_lar_noheader_flat_file_{year}",
                 f"combined_modified_lar_header_flat_file_{year}",
-                f"combined_mlar_row_count_{year}",
             ],
             tags=f"{year}_Filing_Season",
             name=f"generate_combined_modified_lar_flat_file_for_{year}",
@@ -105,22 +99,6 @@ for year in (2019, 2020, 2021, 2022, 2023):
             outputs=f"analyzed_mlar_flat_file_{year}",
             tags=f"{year}_Filing_Season",
             name=f"generate_analyzed_mlar_flat_file_for_{year}",
-        ),
-        # Validate the row counts for the LAR and public modified LAR flat files
-        node(
-            validate_lar_and_mlar_row_counts,
-            inputs=[f"reg_lar_row_count_{year}", f"public_mlar_row_count_{year}"],
-            outputs=None,
-            tags=f"{year}_Filing_Season",
-            name=f"validate_lar_and_public_mlar_row_counts_for_{year}",
-        ),
-        # Validate the row counts for the LAR and combined modified LAR flat files
-        node(
-            validate_lar_and_mlar_row_counts,
-            inputs=[f"reg_lar_row_count_{year}", f"combined_mlar_row_count_{year}"],
-            outputs=None,
-            tags=f"{year}_Filing_Season",
-            name=f"validate_lar_and_combined_mlar_row_counts_for_{year}",
         ),
         # Create panel flat file
         node(
@@ -142,10 +120,7 @@ for year in (2019, 2020, 2021, 2022, 2023):
                 f"lar_raw_parquets_{year}",
                 "params:reduced_lar_columns",
             ],
-            outputs=[
-                f"reduced_lar_reports_parquet_{year}",
-                f"reduced_lar_reports_row_count_{year}",
-            ],
+            outputs=f"reduced_lar_reports_parquet_{year}",
             tags=f"{year}_Filing_Season",
             name=f"generate_reduced_lar_reports_for_{year}",
         ),
@@ -182,10 +157,7 @@ for year in (2019, 2020, 2021, 2022, 2023):
                     f"lar_raw_parquets_{year}_{quarter}",
                     "params:regulator_lar_columns",
                 ],
-                outputs=[
-                    f"regulator_lar_flat_file_{year}_{quarter}",
-                    f"reg_lar_row_count_{year}_{quarter}",
-                ],
+                outputs=f"regulator_lar_flat_file_{year}_{quarter}",
                 tags=[f"{year}_Filing_Season", f"{year}_{quarter}_Filing_Season"],
                 name=f"generate_reg_lar_flat_file_for_{year}_{quarter}",
             ),

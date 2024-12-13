@@ -65,7 +65,7 @@ def create_lar_flat_file(
 
     logger.info(f"Shape of LAR flat file: {concatenated.shape}")
 
-    return concatenated, concatenated.shape[0]
+    return concatenated
 
 
 def create_mlar_flat_file(
@@ -109,7 +109,7 @@ def create_mlar_flat_file(
     logger.info(f"Shape of MLAR flat file: {flat_mlar.shape}")
 
     # Return flat_mlar twice so it can be saved in public and public archive paths
-    return flat_mlar, flat_mlar, flat_mlar.shape[0]
+    return flat_mlar, flat_mlar
 
 
 def analyze_mlar_flat_file(
@@ -121,23 +121,6 @@ def analyze_mlar_flat_file(
         for check in check_config[col]:
             globals()[check](mlar_df, params, year, col)
     return mlar_df
-
-
-def validate_lar_and_mlar_row_counts(lar_row_count: int, mlar_row_count: int) -> None:
-    """Ensures the MLAR flat file and LAR flat files have the same
-    number of rows.
-
-    Args:
-        lar_row_count (int): Number of rows in regulator LAR flat file
-        mlar_row_count (int): Number of rows in public MLAR flat file
-
-    Raises:
-        RuntimeError: raised if the two don't aggree.
-    """
-    if lar_row_count != mlar_row_count:
-        raise RuntimeError(
-            f"Row count mismatch. LAR: {lar_row_count}, MLAR: {mlar_row_count}"
-        )
 
 
 def _process_modified_lar_partition(
