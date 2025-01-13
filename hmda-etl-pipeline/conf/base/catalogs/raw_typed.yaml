@@ -125,7 +125,7 @@ lar_raw_parquets_{year}_{quarter}:
 
 ts_raw_parquet_{year}_{quarter}:
   type: hmda_etl_pipeline.extras.datasets.hmda_parquet_dataset.HMDAParquetDataset
-  filepath: ${globals:regulator_path_prefix}/{year}/ts/01_raw/latest/ts_{quarter}.parquet
+  filepath: ${globals:regulator_path_prefix}/{year}/ts/01_raw/{quarter}/latest/ts_{quarter}.parquet
   credentials: ${globals:credentials}
   save_args:
     engine: pyarrow
