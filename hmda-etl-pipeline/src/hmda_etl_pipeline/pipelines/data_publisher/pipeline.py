@@ -31,7 +31,7 @@ def withkwargs(func, **kwargs):
     return wrapper
 
 
-for year in (2019, 2020, 2021, 2022, 2023):
+for year in (2019, 2020, 2021, 2022, 2023, 2024):
     nodes += [
         # Create regulator LAR flat file
         node(
@@ -173,34 +173,34 @@ for year in (2019, 2020, 2021, 2022, 2023):
         ),
     ]
 
-    for quarter in ("q1", "q2", "q3"):
-        nodes += [
-            # Create LAR quarterly flat file
-            node(
-                create_lar_flat_file,
-                inputs=[
-                    f"lar_raw_parquets_{year}_{quarter}",
-                    "params:regulator_lar_columns",
-                ],
-                outputs=[
-                    f"regulator_lar_flat_file_{year}_{quarter}",
-                    f"reg_lar_row_count_{year}_{quarter}",
-                ],
-                tags=[f"{year}_Filing_Season", f"{year}_{quarter}_Filing_Season"],
-                name=f"generate_reg_lar_flat_file_for_{year}_{quarter}",
-            ),
-            # Create regulator transmittal sheet quarterly flat file
-            node(
-                create_regulator_ts_flat_file,
-                inputs=[
-                    f"ts_raw_parquet_{year}_{quarter}",
-                    "params:regulator_ts_columns",
-                ],
-                outputs=f"regulator_ts_flat_file_{year}_{quarter}",
-                tags=[f"{year}_Filing_Season", f"{year}_{quarter}_Filing_Season"],
-                name=f"generate_regulator_ts_flat_file_for_{year}_{quarter}",
-            ),
-        ]
+    #for quarter in ("q1", "q2", "q3"):
+    #    nodes += [
+    #        # Create LAR quarterly flat file
+    #        node(
+    #            create_lar_flat_file,
+    #            inputs=[
+    #                f"lar_raw_parquets_{year}_{quarter}",
+    #                "params:regulator_lar_columns",
+    #            ],
+    #            outputs=[
+    #                f"regulator_lar_flat_file_{year}_{quarter}",
+    #                f"reg_lar_row_count_{year}_{quarter}",
+    #            ],
+    #            tags=[f"{year}_Filing_Season", f"{year}_{quarter}_Filing_Season"],
+    #            name=f"generate_reg_lar_flat_file_for_{year}_{quarter}",
+    #        ),
+    #        # Create regulator transmittal sheet quarterly flat file
+    #        node(
+    #            create_regulator_ts_flat_file,
+    #            inputs=[
+    #                f"ts_raw_parquet_{year}_{quarter}",
+    #                "params:regulator_ts_columns",
+    #            ],
+    #            outputs=f"regulator_ts_flat_file_{year}_{quarter}",
+    #            tags=[f"{year}_Filing_Season", f"{year}_{quarter}_Filing_Season"],
+    #            name=f"generate_regulator_ts_flat_file_for_{year}_{quarter}",
+    #        ),
+    #    ]
 
 
 def create_pipeline(**kwargs) -> Pipeline:
