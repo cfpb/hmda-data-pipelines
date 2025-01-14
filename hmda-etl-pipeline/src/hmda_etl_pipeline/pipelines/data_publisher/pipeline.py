@@ -31,7 +31,7 @@ def withkwargs(func, **kwargs):
     return wrapper
 
 
-for year in (2019, 2020, 2021, 2022, 2023):
+for year in (2019, 2020, 2021, 2022, 2023, 2024):
     nodes += [
         # Create regulator LAR flat file
         node(

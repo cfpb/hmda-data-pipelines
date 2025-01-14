@@ -23,7 +23,7 @@ from .nodes import (
 # this will be supplied to create_pipeline below
 nodes = []
 
-for year in (2019, 2020, 2021, 2022, 2023):
+for year in (2019, 2020, 2021, 2022, 2023, 2024):
     nodes += [
         # perform count validation
         node(
