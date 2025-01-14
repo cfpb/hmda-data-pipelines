@@ -94,46 +94,46 @@ for year in (2019, 2020, 2021, 2022, 2023):
         ),
     ]
     
-    for quarter in ("q1", "q2", "q3"):
-        nodes += [
-            # perform count validation for quarter
-            node(
-                validate_counts,
-                inputs={
-                    "lar_counts_by_lei": f"pg_lar_counts_by_lei_{year}_{quarter}",
-                    "ts": f"pg_ts_{year}_{quarter}",
-                    "institutions": f"pg_institutions_{year}",
-                },
-                outputs=f"count_verification_passed_{year}_{quarter}",
-                tags=[f"{year}_Filing_Season", f"{year}_{quarter}_Filing_Season"],
-                name=f"validate_counts_for_{year}_{quarter}",
-            ),
-            # write LAR quarterly partitions from postgres to parquet files
-            node(
-                process_lar_partitions,
-                inputs={
-                    "pg_lar_data": f"pg_lar_{year}_{quarter}",
-                    "lar_row_counts_by_lei": f"pg_lar_counts_by_lei_{year}_{quarter}",
-                    "column_dtypes": "params:pg_lar_dtypes",
-                    "count_verification_passed": f"count_verification_passed_{year}_{quarter}",
-                },
-                outputs=f"lar_raw_parquets_{year}_{quarter}",
-                tags=[f"{year}_Filing_Season", f"{year}_{quarter}_Filing_Season"],
-                name=f"write_raw_lar_partitions_to_parquet_files_{year}_{quarter}",
-            ),
-            # write transmittal sheet quarterly table to parquet file
-            node(
-                persist_ts_table,
-                inputs=[
-                    f"pg_ts_{year}_{quarter}",
-                    "params:pg_ts_dtypes",
-                    f"count_verification_passed_{year}_{quarter}",
-                ],
-                outputs=f"ts_raw_parquet_{year}_{quarter}",
-                tags=[f"{year}_Filing_Season", f"{year}_{quarter}_Filing_Season"],
-                name=f"write_ts_table_to_parquet_file_{year}_{quarter}",
-            ),
-        ]
+    #for quarter in ("q1", "q2", "q3"):
+    #    nodes += [
+    #        # perform count validation for quarter
+    #        node(
+    #            validate_counts,
+    #            inputs={
+    #                "lar_counts_by_lei": f"pg_lar_counts_by_lei_{year}_{quarter}",
+    #                "ts": f"pg_ts_{year}_{quarter}",
+    #                "institutions": f"pg_institutions_{year}",
+    #            },
+    #            outputs=f"count_verification_passed_{year}_{quarter}",
+    #            tags=[f"{year}_Filing_Season", f"{year}_{quarter}_Filing_Season"],
+    #            name=f"validate_counts_for_{year}_{quarter}",
+    #        ),
+    #        # write LAR quarterly partitions from postgres to parquet files
+    #        node(
+    #            process_lar_partitions,
+    #            inputs={
+    #                "pg_lar_data": f"pg_lar_{year}_{quarter}",
+    #                "lar_row_counts_by_lei": f"pg_lar_counts_by_lei_{year}_{quarter}",
+    #                "column_dtypes": "params:pg_lar_dtypes",
+    #                "count_verification_passed": f"count_verification_passed_{year}_{quarter}",
+    #            },
+    #            outputs=f"lar_raw_parquets_{year}_{quarter}",
+    #            tags=[f"{year}_Filing_Season", f"{year}_{quarter}_Filing_Season"],
+    #            name=f"write_raw_lar_partitions_to_parquet_files_{year}_{quarter}",
+    #        ),
+    #        # write transmittal sheet quarterly table to parquet file
+    #        node(
+    #            persist_ts_table,
+    #            inputs=[
+    #                f"pg_ts_{year}_{quarter}",
+    #                "params:pg_ts_dtypes",
+    #                f"count_verification_passed_{year}_{quarter}",
+    #            ],
+    #            outputs=f"ts_raw_parquet_{year}_{quarter}",
+    #            tags=[f"{year}_Filing_Season", f"{year}_{quarter}_Filing_Season"],
+    #            name=f"write_ts_table_to_parquet_file_{year}_{quarter}",
+    #        ),
+    #    ]
 
 
 def create_pipeline(**kwargs) -> Pipeline:
