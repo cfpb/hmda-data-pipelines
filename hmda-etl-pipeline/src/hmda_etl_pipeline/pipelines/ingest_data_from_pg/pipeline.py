@@ -34,7 +34,7 @@ for year in (2019, 2020, 2021, 2022, 2023):
                 "institutions": f"pg_institutions_{year}",
             },
             outputs=f"count_verification_passed_{year}",
-            tags=[f"{year}_Filing_Season"],
+            tags=[f"{year}_Filing_Season", f"{year}_Annual_Filing_Season"],
             name=f"validate_counts_for_{year}",
         ),
         # write LAR partitions from postgres to parquet files
@@ -47,7 +47,7 @@ for year in (2019, 2020, 2021, 2022, 2023):
                 "count_verification_passed": f"count_verification_passed_{year}",
             },
             outputs=f"lar_raw_parquets_{year}",
-            tags=[f"{year}_Filing_Season"],
+            tags=[f"{year}_Filing_Season", f"{year}_Annual_Filing_Season"],
             name=f"write_raw_lar_partitions_to_parquet_files_{year}",
         ),
         # write email domains table to parquet file
@@ -58,7 +58,7 @@ for year in (2019, 2020, 2021, 2022, 2023):
                 "params:pg_institutions_email_domains_dtypes",
             ],
             outputs=f"institutions_email_domains_raw_parquet_{year}",
-            tags=[f"{year}_Filing_Season"],
+            tags=[f"{year}_Filing_Season", f"{year}_Annual_Filing_Season"],
             name=f"write_institutions_email_domains_table_to_parquet_file_{year}",
         ),
         # write institutions table to parquet file
@@ -70,7 +70,7 @@ for year in (2019, 2020, 2021, 2022, 2023):
                 f"count_verification_passed_{year}",
             ],
             outputs=f"institutions_raw_parquet_{year}",
-            tags=[f"{year}_Filing_Season"],
+            tags=[f"{year}_Filing_Season", f"{year}_Annual_Filing_Season"],
             name=f"write_institutions_table_to_parquet_file_{year}",
         ),
         # write transmittal sheet table to parquet file
@@ -82,14 +82,14 @@ for year in (2019, 2020, 2021, 2022, 2023):
                 f"count_verification_passed_{year}",
             ],
             outputs=f"ts_raw_parquet_{year}",
-            tags=[f"{year}_Filing_Season"],
+            tags=[f"{year}_Filing_Season", f"{year}_Annual_Filing_Season"],
             name=f"write_ts_table_to_parquet_file_{year}",
         ),
         node(
             get_state_county_code_mapping,
             inputs=[f"pg_cbsa_county_name_{year}", "params:pg_state_county_dtypes"],
             outputs=f"state_county_mapping_{year}",
-            tags=f"{year}_Filing_Season",
+            tags=[f"{year}_Filing_Season", f"{year}_Annual_Filing_Season"],
             name=f"generate_state_county_mapping_for_reports_for_{year}",
         ),
     ]
