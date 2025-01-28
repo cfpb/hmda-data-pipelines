@@ -42,7 +42,6 @@ for year in (2019, 2020, 2021, 2022, 2023, 2024):
             process_lar_partitions,
             inputs={
                 "pg_lar_data": f"pg_lar_{year}",
-                "lar_row_counts_by_lei": f"pg_lar_counts_by_lei_{year}",
                 "column_dtypes": "params:pg_lar_dtypes",
                 "count_verification_passed": f"count_verification_passed_{year}",
             },
@@ -113,7 +112,6 @@ for year in (2019, 2020, 2021, 2022, 2023, 2024):
                 process_lar_partitions,
                 inputs={
                     "pg_lar_data": f"pg_lar_{year}_{quarter}",
-                    "lar_row_counts_by_lei": f"pg_lar_counts_by_lei_{year}_{quarter}",
                     "column_dtypes": "params:pg_lar_dtypes",
                     "count_verification_passed": f"count_verification_passed_{year}_{quarter}",
                 },
