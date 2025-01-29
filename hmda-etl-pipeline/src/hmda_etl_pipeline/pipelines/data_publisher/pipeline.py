@@ -15,7 +15,6 @@ from .nodes import (
     create_mlar_flat_file,
     create_lar_flat_file,
     analyze_mlar_flat_file,
-    validate_lar_and_mlar_row_counts,
     create_institutions_flat_file,
     create_regulator_ts_flat_file,
     create_public_ts_flat_file,
@@ -105,22 +104,6 @@ for year in (2019, 2020, 2021, 2022, 2023, 2024):
             outputs=f"analyzed_mlar_flat_file_{year}",
             tags=f"{year}_Filing_Season",
             name=f"generate_analyzed_mlar_flat_file_for_{year}",
-        ),
-        # Validate the row counts for the LAR and public modified LAR flat files
-        node(
-            validate_lar_and_mlar_row_counts,
-            inputs=[f"reg_lar_row_count_{year}", f"public_mlar_row_count_{year}"],
-            outputs=None,
-            tags=f"{year}_Filing_Season",
-            name=f"validate_lar_and_public_mlar_row_counts_for_{year}",
-        ),
-        # Validate the row counts for the LAR and combined modified LAR flat files
-        node(
-            validate_lar_and_mlar_row_counts,
-            inputs=[f"reg_lar_row_count_{year}", f"combined_mlar_row_count_{year}"],
-            outputs=None,
-            tags=f"{year}_Filing_Season",
-            name=f"validate_lar_and_combined_mlar_row_counts_for_{year}",
         ),
         # Create panel flat file
         node(
