@@ -37,7 +37,7 @@ for year in (2019, 2020, 2021, 2022, 2023, 2024):
             create_lar_flat_file,
             inputs=[f"lar_raw_parquets_{year}", "params:regulator_lar_columns"],
             outputs=[f"regulator_lar_flat_file_{year}", f"reg_lar_row_count_{year}"],
-            tags=f"{year}_Filing_Season",
+            tags=[f"{year}_Filing_Season", f"{year}_Annual_Filing_Season"],
             name=f"generate_reg_lar_flat_file_for_{year}",
         ),
         # Create LAR loan limit flat file
@@ -48,7 +48,7 @@ for year in (2019, 2020, 2021, 2022, 2023, 2024):
                 f"lar_loan_limit_flat_file_{year}",
                 f"lar_loan_limit_row_count_{year}",
             ],
-            tags=f"{year}_Filing_Season",
+            tags=[f"{year}_Filing_Season", f"{year}_Annual_Filing_Season"],
             name=f"generate_lar_loan_limit_flat_file_for_{year}",
         ),
         # Convert LAR data to public modified LAR data
@@ -59,7 +59,7 @@ for year in (2019, 2020, 2021, 2022, 2023, 2024):
                 "params:public_mlar_legacy_column_names_map_list",
             ],
             outputs=f"public_modified_lar_raw_parquets_{year}",
-            tags=f"{year}_Filing_Season",
+            tags=[f"{year}_Filing_Season", f"{year}_Annual_Filing_Season"],
             name=f"generate_public_modified_lar_for_{year}",
         ),
         # Convert LAR data to combined modified LAR data
@@ -70,7 +70,7 @@ for year in (2019, 2020, 2021, 2022, 2023, 2024):
                 "params:combined_mlar_legacy_column_names_map_list",
             ],
             outputs=f"combined_modified_lar_raw_parquets_{year}",
-            tags=f"{year}_Filing_Season",
+            tags=[f"{year}_Filing_Season", f"{year}_Annual_Filing_Season"],
             name=f"generate_combined_modified_lar_for_{year}",
         ),
         # Create public modified LAR flat file
@@ -82,7 +82,7 @@ for year in (2019, 2020, 2021, 2022, 2023, 2024):
                 f"archive_public_modified_lar_flat_file_{year}",
                 f"public_mlar_row_count_{year}",
             ],
-            tags=f"{year}_Filing_Season",
+            tags=[f"{year}_Filing_Season", f"{year}_Annual_Filing_Season"],
             name=f"generate_public_modified_lar_flat_file_for_{year}",
         ),
         # Create combined modified LAR flat file and header file
@@ -94,7 +94,7 @@ for year in (2019, 2020, 2021, 2022, 2023, 2024):
                 f"combined_modified_lar_header_flat_file_{year}",
                 f"combined_mlar_row_count_{year}",
             ],
-            tags=f"{year}_Filing_Season",
+            tags=[f"{year}_Filing_Season", f"{year}_Annual_Filing_Season"],
             name=f"generate_combined_modified_lar_flat_file_for_{year}",
         ),
         # Analyze modified LAR flat file
@@ -102,7 +102,7 @@ for year in (2019, 2020, 2021, 2022, 2023, 2024):
             withkwargs(analyze_mlar_flat_file, year=year),
             inputs=[f"public_modified_lar_flat_file_{year}", "parameters"],
             outputs=f"analyzed_mlar_flat_file_{year}",
-            tags=f"{year}_Filing_Season",
+            tags=[f"{year}_Filing_Season", f"{year}_Annual_Filing_Season"],
             name=f"generate_analyzed_mlar_flat_file_for_{year}",
         ),
         # Create panel flat file
@@ -115,7 +115,7 @@ for year in (2019, 2020, 2021, 2022, 2023, 2024):
                 "params:institutions_columns",
             ],
             outputs=f"institutions_flat_file_{year}",
-            tags=f"{year}_Filing_Season",
+            tags=[f"{year}_Filing_Season", f"{year}_Annual_Filing_Season"],
             name=f"generate_institutions_flat_file_for_{year}",
         ),
         # Create reduced LAR flat file used for aggregate and disclosure reports
@@ -129,7 +129,7 @@ for year in (2019, 2020, 2021, 2022, 2023, 2024):
                 f"reduced_lar_reports_parquet_{year}",
                 f"reduced_lar_reports_row_count_{year}",
             ],
-            tags=f"{year}_Filing_Season",
+            tags=[f"{year}_Filing_Season", f"{year}_Annual_Filing_Season"],
             name=f"generate_reduced_lar_reports_for_{year}",
         ),
         # Create regulator transmittal sheet flat file
@@ -137,7 +137,7 @@ for year in (2019, 2020, 2021, 2022, 2023, 2024):
             create_regulator_ts_flat_file,
             inputs=[f"ts_raw_parquet_{year}", "params:regulator_ts_columns"],
             outputs=f"regulator_ts_flat_file_{year}",
-            tags=f"{year}_Filing_Season",
+            tags=[f"{year}_Filing_Season", f"{year}_Annual_Filing_Season"],
             name=f"generate_regulator_ts_flat_file_for_{year}",
         ),
         # Create public transmittal sheet flat file
@@ -151,7 +151,7 @@ for year in (2019, 2020, 2021, 2022, 2023, 2024):
                 f"public_ts_flat_file_{year}",
                 f"archive_public_ts_flat_file_{year}",
             ],
-            tags=f"{year}_Filing_Season",
+            tags=[f"{year}_Filing_Season", f"{year}_Annual_Filing_Season"],
             name=f"generate_public_ts_flat_file_for_{year}",
         ),
     ]
