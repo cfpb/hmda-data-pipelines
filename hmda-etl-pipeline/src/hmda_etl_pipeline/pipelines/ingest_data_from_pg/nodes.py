@@ -15,6 +15,7 @@ from typing import Callable, Dict
 import numpy as np
 import pandas as pd
 from pandas.io.parsers import TextFileReader
+from functools import partial
 
 logger = logging.getLogger(__name__)
 
@@ -171,24 +172,14 @@ def _process_lar_partition(
 
     return lar_df
 
-
 def process_lar_partitions(
     pg_lar_data: TextFileReader,
-    lar_row_counts_by_lei: pd.DataFrame,
     column_dtypes: Dict[str, str],
     count_verification_passed: bool,
 ) -> Dict[str, Callable[[], pd.DataFrame]]:
     """Facilitates the partitioning of Postgres LAR data to typed
     parquet files. This function defers processing of LAR partitions to
     the function _process_lar_partition.
-
-    The pg_lar_data generator contains an unknown number of elements. In
-    order to calculate the number of partitions, the first partition is
-    loaded and the number of partitions is calculated at run time. This
-    is done by calculating the total number of rows in the given LAR
-    table via lar_row_counts_by_lei, and then dividing by the number of
-    rows within the first partition. The output dictionary has this
-    number of keys (rounded up to the next integer).
 
     The input count_verification_passed is not used within this
     function. It exists because it is supplied by the count verification
@@ -201,11 +192,6 @@ def process_lar_partitions(
         pg_lar_data (TextFileReader): Raw, chunked lar data from
             production Postgres. This iterable loads data lazily via
             repeated calls to next().
-        lar_row_counts_by_lei (pd.DataFrame): A dataframe specifying the
-            number of LAR records associated with each LEI. This serves
-            double duty. Here we use it to calculate the number of rows
-            within the given LAR table. It also serves the purpose of
-            initial validation on LAR and TS data counts.
         column_dtypes (Dict[str,str]): This is a mapping of column name
             to Pandas datatypes. This is supplied by Kedro and is read
             from the data in parameters.ingest_data_from_pg.yaml.
@@ -221,38 +207,24 @@ def process_lar_partitions(
             refers to this as lazy loading.
     """
 
-    # this function sets this global value. Used to facilitate logging
-    # in a deferred execution context.
     global n_partitions_to_process
 
-    # Total row count computed from LAR count per LEI
-    n_rows = lar_row_counts_by_lei["count"].sum()
+    partition_holder = {}
+    partition_index = 0
 
-    # Determine the number of rows per partition, and total number of
-    # partitions using the first sample of data. Using round() resulted
-    # in unpredictable behavior because it rounds to the nearest int.
-    # A fractional partition is an additional partition. Round up!
-    partition_0 = next(pg_lar_data)
-    n_partitions_to_process = np.ceil(n_rows / partition_0.shape[0]).astype(int)
-
-    partition_holder = {
-        "lar_0": lambda: _process_lar_partition(
-            lar_df=partition_0, dtypes=column_dtypes
-        )
-    }
-
+    for partition_index, chunk in enumerate(pg_lar_data):
+        name = "lar_" + str(partition_index)
+        partition_holder[name] = partial(_process_lar_partition,lar_df=chunk,dtypes=column_dtypes)
+        
+    n_partitions_to_process = partition_index + 1
+    
     if n_partitions_to_process == 1:
         # this should only occur at the very beginning of filing season
         logger.warning("Only a single LAR partition is being processed")
-        return partition_holder
-    else:
-        for partition_index in range(1, n_partitions_to_process):
-            partition_holder[f"lar_{partition_index}"] = lambda: _process_lar_partition(
-                lar_df=next(pg_lar_data),
-                dtypes=column_dtypes,
-            )
+    
+    logger.info("Found " + str(n_partitions_to_process) + " LAR Partitions")
 
-        return partition_holder
+    return partition_holder
 
 
 def persist_ts_table(
