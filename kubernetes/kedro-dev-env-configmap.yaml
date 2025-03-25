@@ -4,8 +4,8 @@ metadata:
   name: kedro-dev-env-configmap
 data:
   globals.yaml: |-
-    regulator_path_prefix: s3://cfpb-hmda-export/dev/kedro-etl-pipeline/regulator
-    archive_public_path_prefix: s3://cfpb-hmda-export/dev/kedro-etl-pipeline/archive-public
-    public_path_prefix: s3://cfpb-hmda-export/dev/kedro-etl-pipeline/public
-    reports_path_prefix: s3://cfpb-hmda-export/dev/kedro-etl-pipeline/reports 
+    regulator_path_prefix: s3://xxx/dev/kedro-etl-pipeline/regulator
+    archive_public_path_prefix: s3://xxx/dev/kedro-etl-pipeline/archive-public
+    public_path_prefix: s3://xxx/dev/kedro-etl-pipeline/public
+    reports_path_prefix: s3://xxx/dev/kedro-etl-pipeline/reports 
     credentials: aws_cfpb_hmda_export
