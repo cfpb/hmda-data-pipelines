@@ -22,13 +22,13 @@ kubectl create secret generic kedro-dev-env-config --from-file=globals.yaml
 ###### m4.4xlarge
 ```
 aws eks create-nodegroup \
---cluster-name awsdevhmda3 \
---nodegroup-name awsdevhmda3kedro-4x \
+--cluster-name xxx \
+--nodegroup-name xxx \
 --scaling-config minSize=1,maxSize=1,desiredSize=1 \
---subnets subnet-04c8252aa9627efb1  \
+--subnets xxx  \
 --instance-types m5.4xlarge \
---remote-access ec2SshKey=CFPB_Default,sourceSecurityGroups=sg-0e94c2387fa0adc74 \
---node-role arn:aws:iam::626560329871:role/hmda-eks-role \
+--remote-access xxx \
+--node-role xxx \
 --labels node-group=kedro \
 --taints key=node-group,value=kedro,effect=NO_SCHEDULE
 ```
@@ -38,33 +38,33 @@ aws eks create-nodegroup \
 - Create Node
 ```
 aws eks create-nodegroup \
---cluster-name awsdevhmda3 \
---nodegroup-name awsdevhmda3kedro-large \
---scaling-config minSize=0,maxSize=1,desiredSize=0 \
---subnets subnet-04c8252aa9627efb1  \
+--cluster-name xxx \
+--nodegroup-name xxx \
+--scaling-config minSize=1,maxSize=1,desiredSize=1 \
+--subnets xxx  \
 --instance-types r6a.4xlarge \
---remote-access ec2SshKey=CFPB_Default,sourceSecurityGroups=sg-0e94c2387fa0adc74 \
---node-role arn:aws:iam::626560329871:role/hmda-eks-role \
+--remote-access xxx \
+--node-role xxx \
 --labels node-group=kedro-large \
 --taints key=node-group,value=kedro-large,effect=NO_SCHEDULE
 ```
 - Scale to zero
 ```
 aws eks update-nodegroup-config \
---cluster-name awsdevhmda3 \
---nodegroup-name awsdevhmda3kedro-large \
+--cluster-name xxx \
+--nodegroup-name xxx \
 --scaling-config minSize=0,maxSize=1,desiredSize=0
 ```
 - Scale to one
 ```
 aws eks update-nodegroup-config \
---cluster-name awsdevhmda3 \
---nodegroup-name awsdevhmda3kedro-large  \
+--cluster-name xxx \
+--nodegroup-name xxx \
 --scaling-config minSize=1,maxSize=1,desiredSize=1
 ```
 - Status
 ```
-kubectl get nodes -l "eks.amazonaws.com/nodegroup=awsdevhmda3kedro-large" -w
+kubectl get nodes -l "eks.amazonaws.com/nodegroup=xxx" -w
 ```
 > **_Note:_** Run pod after node is in Ready state
 
@@ -72,33 +72,33 @@ kubectl get nodes -l "eks.amazonaws.com/nodegroup=awsdevhmda3kedro-large" -w
 - Create Node
 ```
 aws eks create-nodegroup \
---cluster-name awsdevhmda3 \
---nodegroup-name awsdevhmda3kedro-regular \
+--cluster-name xxx \
+--nodegroup-name xxx \
 --scaling-config minSize=0,maxSize=1,desiredSize=0 \
---subnets subnet-04c8252aa9627efb1  \
+--subnets xxx  \
 --instance-types m5.2xlarge \
---remote-access ec2SshKey=CFPB_Default,sourceSecurityGroups=sg-0e94c2387fa0adc74 \
---node-role arn:aws:iam::626560329871:role/hmda-eks-role \
+--remote-access xxx \
+--node-role xxx \
 --labels node-group=kedro-regular \
 --taints key=node-group,value=kedro-regular,effect=NO_SCHEDULE
 ```
 - Scale to zero
 ```
 aws eks update-nodegroup-config \
---cluster-name awsdevhmda3 \
---nodegroup-name awsdevhmda3kedro-regular \
+--cluster-name xxx \
+--nodegroup-name xxx \
 --scaling-config minSize=0,maxSize=1,desiredSize=0
 ```
 - Scale to one
 ```
 aws eks update-nodegroup-config \
---cluster-name awsdevhmda3 \
---nodegroup-name awsdevhmda3kedro-regular  \
+--cluster-name xxx \
+--nodegroup-name xxx  \
 --scaling-config minSize=1,maxSize=1,desiredSize=1
 ```
 - Status
 ```
-kubectl get nodes -l "eks.amazonaws.com/nodegroup=awsdevhmda3kedro-regular" -w
+kubectl get nodes -l "eks.amazonaws.com/nodegroup=xxx" -w
 ```
 > **_Note:_** Run pod after node is in Ready state
 
@@ -108,7 +108,7 @@ kubectl get nodes -l "eks.amazonaws.com/nodegroup=awsdevhmda3kedro-regular" -w
 Our kedro report generation jobs are based on the [Amazon Elastic Container Registry (Amazon ECR)](https://docs.aws.amazon.com/ecr). Set your environment as shown.
 
 ```
-$ export AWS_ECR=626560329871.dkr.ecr.us-east-1.amazonaws.com
+$ export AWS_ECR=xxx
 ```
 
 The [AWS CLI](https://aws.amazon.com/cli) is also required.
@@ -209,7 +209,7 @@ kubectl apply -f kedro-etl-pipeline-job-panel-2023.yaml
 ```
 - Confirm that S3 contains the dated and latest panel file for that year. The exact S3 filepaths can be found in the job's logs, along with the number of rows in the dataset.
 ```
-aws s3 ls  --human-readable s3://cfpb-hmda-export/dev/kedro-etl-pipeline/regulator/2023/institutions/02_data_publication/
+aws s3 ls  --human-readable s3://xxx/dev/kedro-etl-pipeline/regulator/2023/institutions/02_data_publication/
 2024-09-26 21:01:10    1.0 MiB 2024-09-26_2023_panel.txt
 2024-09-26 21:01:08    1.0 MiB latest_2023_panel.txt
 ```
@@ -226,7 +226,7 @@ kubectl apply -f kedro-etl-pipeline-job-regulator-lar-2023.yaml
 ```
 - Confirm that S3 contains the dated LAR flat file for that year. The exact S3 filepath can be found in the job's logs, along with the number of rows in the dataset.
 ```
-aws s3 ls  --human-readable s3://cfpb-hmda-export/dev/kedro-etl-pipeline/regulator/2023/lar/02_data_publication/
+aws s3 ls  --human-readable s3://xxx/dev/kedro-etl-pipeline/regulator/2023/lar/02_data_publication/
 2024-03-15 10:41:01    5.3 GiB 2024-03-15-2023_lar.txt
 2024-03-20 16:20:53    5.3 GiB 2024-03-20-2023_lar.txt
 ```
@@ -243,10 +243,10 @@ kubectl apply -f kedro-etl-pipeline-job-modified-lar-2023.yaml
 ```
 - Confirm that S3 contains the modified LAR flat files (public and public archive) for that year. The exact S3 filepaths can be found in the job's logs, along with the number of rows in the dataset.
 ```
-aws s3 ls  --human-readable s3://cfpb-hmda-export/dev/kedro-etl-pipeline/public/2023/modified_lar/02_data_publication/
+aws s3 ls  --human-readable s3://xxx/dev/kedro-etl-pipeline/public/2023/modified_lar/02_data_publication/
 2024-09-26 22:06:06    2.3 GiB 2023_lar.zip
 
-aws s3 ls  --human-readable s3://cfpb-hmda-export/dev/kedro-etl-pipeline/archive-public/2023/modified_lar/02_data_publication/
+aws s3 ls  --human-readable s3://xxx/dev/kedro-etl-pipeline/archive-public/2023/modified_lar/02_data_publication/
 2024-09-26 22:26:41    2.3 GiB 2023_lar_2024-09-26.zi
 ```
 
@@ -262,7 +262,7 @@ kubectl apply -f kedro-etl-pipeline-job-regulator-ts-2023.yaml
 ```
 - Confirm that S3 contains the transmittal sheet flat file for that year. The exact S3 filepath can be found in the job's logs, along with the number of rows in the dataset.
 ```
-aws s3 ls  --human-readable s3://cfpb-hmda-export/dev/kedro-etl-pipeline/regulator/2023/ts/02_data_publication/
+aws s3 ls  --human-readable s3://xxx/dev/kedro-etl-pipeline/regulator/2023/ts/02_data_publication/
 2024-09-17 13:31:51    8.1 KiB 2024-09-17_quarter_1_2023_ts.txt
 2024-09-19 19:42:33  931.7 KiB 2024-09-19-2023_ts.txt
 2024-09-20 13:26:18  931.7 KiB 2024-09-20-2023_ts.txt
@@ -280,10 +280,10 @@ kubectl apply -f kedro-etl-pipeline-job-public-ts-2023.yaml
 ```
 - Confirm that S3 contains the transmittal sheet flat files (public and public archive) for that year. The exact S3 filepaths can be found in the job's logs, along with the number of rows in the dataset.
 ```
-aws s3 ls  --human-readable s3://cfpb-hmda-export/dev/kedro-etl-pipeline/public/2023/public_ts/02_data_publication/
+aws s3 ls  --human-readable s3://xxx/dev/kedro-etl-pipeline/public/2023/public_ts/02_data_publication/
 2024-09-26 20:59:41  200.4 KiB 2023_ts.zip
 
-aws s3 ls  --human-readable s3://cfpb-hmda-export/dev/kedro-etl-pipeline/archive-public/2023/public_ts/02_data_publication/
+aws s3 ls  --human-readable s3://xxx/dev/kedro-etl-pipeline/archive-public/2023/public_ts/02_data_publication/
 2024-09-26 20:59:49  200.5 KiB 2023_ts_2024-09-26.zip
 ```
 
@@ -299,10 +299,10 @@ cat lei_list.csv
 549300M8WGW2D17CZD19
 OX3PU53ZLPQKJ4700D47
 ```
-- The file should be placed in s3://cfpb-hmda-export/dev/kedro-etl-pipeline/reports/2023/disclosure/ for disclosure reports or in s3://cfpb-hmda-export/dev/kedro-etl-pipeline/reports/2023/aggregate/ for aggregate reports
+- The file should be placed in s3://xxx/dev/kedro-etl-pipeline/reports/2023/disclosure/ for disclosure reports or in s3://cfpb-hmda-export/dev/kedro-etl-pipeline/reports/2023/aggregate/ for aggregate reports
 - Upload LEI list file to S3
 ```
-aws s3 cp lei_list.csv s3://cfpb-hmda-export/dev/kedro-etl-pipeline/reports/disclosure/2023
+aws s3 cp lei_list.csv s3://xxx/dev/kedro-etl-pipeline/reports/disclosure/2023
 ```
 - For disclosure reports, this file is used to run reports on a list of LEI.
 - For aggregate reports, this file is used to exclude some LEI from the reports.
@@ -316,10 +316,10 @@ cat msa_list.csv
 99999
 ```
 - This file is only used for aggregate reports to run reports on a list of MSA.
-- The file should be placed in s3://cfpb-hmda-export/dev/kedro-etl-pipeline/reports/aggregate/2023/.
+- The file should be placed in s3://xxx/dev/kedro-etl-pipeline/reports/aggregate/2023/.
 - Upload MSA list file to S3
 ```
-aws s3 cp msa_list.csv s3://cfpb-hmda-export/dev/kedro-etl-pipeline/reports/aggregate/2023/
+aws s3 cp msa_list.csv s3://xxx/dev/kedro-etl-pipeline/reports/aggregate/2023/
 ```
 
 ##### Step 2) Generate state county mapping csv file (Run once per year)
@@ -333,7 +333,7 @@ kubectl apply -f kedro-etl-pipeline-job-state-county-mapping-2023.yaml
 ```
 - Confirm that S3 contains the state county mapping csv file for that year. The exact S3 filepath can be found in the job's logs, along with the number of rows in the dataset.
 ```
-aws s3 ls  --human-readable s3://cfpb-hmda-export/dev/kedro-etl-pipeline/reports/2023/state_county_mapping.csv
+aws s3 ls  --human-readable s3://xxx/dev/kedro-etl-pipeline/reports/2023/state_county_mapping.csv
 2024-05-10 14:28:10   57.1 KiB state_county_mapping.csv
 ```
 
@@ -349,7 +349,7 @@ kubectl apply -f kedro-etl-pipeline-job-reduced-lar-2023.yaml
 ```
 - Confirm that S3 contains the reduced LAR parquet file for that year. The exact S3 filepath can be found in the job's logs, along with the number of rows in the dataset.
 ```
-aws s3 ls  --human-readable s3://cfpb-hmda-export/dev/kedro-etl-pipeline/reports/2023/reduced_lar.parquet
+aws s3 ls  --human-readable s3://xxx/dev/kedro-etl-pipeline/reports/2023/reduced_lar.parquet
 2024-05-01 18:52:19  307.0 MiB reduced_lar.parquet
 ```
 
@@ -381,7 +381,7 @@ kubectl apply -f kedro-etl-pipeline-job-aggregate-2023.yaml
 ```
 - S3 outputs MSA folder count processed
 ```
-aws s3 ls  --human-readable s3://cfpb-hmda-export/dev/kedro-etl-pipeline/reports/2023/aggregate/aggregate_reports/ | wc -l
+aws s3 ls  --human-readable s3://xxx/dev/kedro-etl-pipeline/reports/2023/aggregate/aggregate_reports/ | wc -l
     1899
 ```
 - Alternative command to run all pre steps and aggregate report in a single command (not used)
@@ -409,7 +409,7 @@ kubectl apply -f kedro-etl-pipeline-job-disclosure-2023.yaml
 ```
 - S3 outputs LEI folder count processed
 ```
-aws s3 ls  --human-readable s3://cfpb-hmda-export/dev/kedro-etl-pipeline/reports/disclosure/2023/disclosure_reports/ | wc -l
+aws s3 ls  --human-readable s3://xxx/dev/kedro-etl-pipeline/reports/disclosure/2023/disclosure_reports/ | wc -l
     4375
 ```
 - Alternative command to run all pre steps and disclosure report in a single command (not used)
@@ -458,13 +458,13 @@ kubectl apply -f kedro-etl-pipeline-job-panel-2023-snapshot.yaml
 #### Additional commands to check generate files
 - All files for year 2023
 ```
-aws s3 ls --recursive --human-readable s3://cfpb-hmda-export/dev/kedro-etl-pipeline/reports/2023/ | grep -v "0 Bytes"
+aws s3 ls --recursive --human-readable s3://xxx/dev/kedro-etl-pipeline/reports/2023/ | grep -v "0 Bytes"
 ```
 - All files generated on specific date
 ```
-aws s3 ls --recursive --human-readable s3://cfpb-hmda-export/dev/kedro-etl-pipeline/reports/2023/ | grep -v "0 Bytes" | grep "2023-11-17"
+aws s3 ls --recursive --human-readable s3://xxx/dev/kedro-etl-pipeline/reports/2023/ | grep -v "0 Bytes" | grep "2023-11-17"
 ```
 - Disclosure Reports single LEI
 ```
-aws s3 ls --recursive --human-readable s3://cfpb-hmda-export/dev/kedro-etl-pipeline/reports/2023/ | grep -v "0 Bytes" | grep -e 2024 | grep 549300FGXN1K3HLB1R50 | wc -l
+aws s3 ls --recursive --human-readable s3://xxx/dev/kedro-etl-pipeline/reports/2023/ | grep -v "0 Bytes" | grep -e 2024 | grep 549300FGXN1K3HLB1R50 | wc -l
 ```
