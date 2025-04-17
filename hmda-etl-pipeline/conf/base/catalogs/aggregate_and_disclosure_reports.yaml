@@ -1,7 +1,7 @@
 # These datasets are those produced by the "Disclosure Reports" service. 
 
 aggregate_reports_{year}:
-  type: PartitionedDataset
+  type: partitions.PartitionedDataset
   path: ${globals:reports_path_prefix}/aggregate/{year}/aggregate_reports
   overwrite: False # Don't remove old reports for skipped lei
   dataset:
@@ -14,7 +14,7 @@ aggregate_reports_{year}:
       layer: Aggregate and Disclosure Reports
 
 disclosure_reports_{year}:
-  type: PartitionedDataset
+  type: partitions.PartitionedDataset
   path: ${globals:reports_path_prefix}/disclosure/{year}/disclosure_reports
   overwrite: False # Don't remove old reports for skipped lei
   dataset:
