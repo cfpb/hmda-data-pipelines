@@ -24,13 +24,15 @@ def check_invalidity(mlar_df: pd.DataFrame, params: Dict, year: int, col: str) -
 
 def check_high_values(mlar_df: pd.DataFrame, params: Dict, year: int, col: str) -> None:
     def high_value(row: pd.Series, col: str) -> bool:
-        return row[col] >= get_var(params, col, "high_value")
+        val = pd.to_numeric(row[col], errors="coerce")
+        return pd.notna(val) and val >= get_var(params, col, "high_value")
     add_markers(mlar_df, col, high_value, "H")
 
 
 def check_low_values(mlar_df: pd.DataFrame, params: Dict, year: int, col: str) -> None:
     def low_value(row: pd.Series, col: str) -> bool:
-        return row[col] <= get_var(params, col, "low_value")
+        val = pd.to_numeric(row[col], errors="coerce")
+        return pd.notna(val) and val <= get_var(params, col, "low_value")
     add_markers(mlar_df, col, low_value, "L")
 
 
