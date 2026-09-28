@@ -13,7 +13,7 @@ spec:
         fsGroup: 999
       containers:
         - name: kedro
-          image: 039774476268.dkr.ecr.us-east-1.amazonaws.com/cfpb/regtech/hmda/hmda-kedro-etl-pipeline:06082026-v1
+          image: ECR-ACCOUNT.dkr.ecr.us-east-1.amazonaws.com/cfpb/regtech/hmda/hmda-kedro-etl-pipeline:06082026-v1
           imagePullPolicy: Always
           env:
             - name: AWS_DEFAULT_REGION
