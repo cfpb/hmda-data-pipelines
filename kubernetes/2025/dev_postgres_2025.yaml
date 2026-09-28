@@ -3,7 +3,8 @@
 # LAR count by LEI is included within this file, but it may make more sense for this
 # dataset to exist within the initial_could_validation.yaml file.
 
-# This file is the same for all years before 2024
+# This file is the same for all years before 2024 - cbsa_county_name
+# This file 2024 onwards - cbsa_county_name_v2
 pg_cbsa_county_name_{year}:
   type: pandas.SQLQueryDataset
   sql: "SELECT * FROM hmda_user.cbsa_county_name_v2;"
