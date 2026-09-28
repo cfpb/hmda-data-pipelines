@@ -9,7 +9,8 @@ from .nodes import create_aggregate_reports, create_disclosure_reports
 # this will be supplied to create_pipeline below
 nodes = []
 
-for year in (2025,):
+#  Add new  year
+for year in (2019, 2020, 2021, 2022, 2023, 2024, 2025):
     nodes += [
         node(
             create_aggregate_reports,

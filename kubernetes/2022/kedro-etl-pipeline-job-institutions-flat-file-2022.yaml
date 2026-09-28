@@ -1,19 +1,18 @@
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: kedro-etl-pipeline-job-aggregate-2025
+  name: kedro-etl-pipeline-job-institutions-flat-file-2022
   namespace: cron-jobs
   labels:
-    job: kedro-etl-pipeline-job-aggregate-2025
+    job: kedro-etl-pipeline-job-institutions-flat-file-2022
 spec:
   template:
     spec:
-      serviceAccountName: hmda-platform
       securityContext:
         fsGroup: 999
       containers:
         - name: kedro
-          image: ECR-ACCOUNT.dkr.ecr.us-east-1.amazonaws.com/cfpb/regtech/hmda/hmda-kedro-etl-pipeline:06082026-v1
+          image: ECR-ACCOUNT.dkr.ecr.us-east-1.amazonaws.com/cfpb/regtech/hmda/hmda-kedro-etl-pipeline:09182026-2022y-v1
           imagePullPolicy: Always
           env:
             - name: AWS_DEFAULT_REGION
@@ -26,11 +25,10 @@ spec:
               value: "1"
           volumeMounts:
             - name: kedro-base-credentials
-              mountPath: /tmp/kedro-base-credentials
               readOnly: true
+              mountPath: /tmp/kedro-base-credentials
             - name: kedro-env-credentials
               mountPath: /tmp/kedro-env-credentials
-              readOnly: true
             - name: kedro-s3-paths
               mountPath: /tmp/kedro-s3-paths
               readOnly: true
@@ -72,9 +70,16 @@ spec:
                 mkdir -p /hmda-etl-pipeline/logs && touch /hmda-etl-pipeline/logs/info.log;
 
                 cd /hmda-etl-pipeline/
-                kedro run --runner=ThreadRunner --pipeline="aggregate_and_disclosure_reports" --params="aggregate_reports_path_for_year_2025=data/reports/aggregate/2025/aggregate_reports,report_2025=2025,max_workers=6,skip_existing_reports=False,use_msa_list=False" --tags="2025_Filing_Season" --env=dev --to-outputs="aggregate_reports_2025";
+                kedro run --runner=ThreadRunner --params="max_workers=2" --tags="2022_Filing_Season" --env=dev --to-outputs="institutions_flat_file_2022";
 
                 true; sleep 5
+          resources:
+            requests:
+              memory: "3Gi"
+              cpu: "1"
+            limits:
+              memory: "120Gi"
+              cpu: "12"
       volumes:
         - name: kedro-base-credentials
           csi:
@@ -94,18 +99,8 @@ spec:
             readOnly: true
             volumeAttributes:
               secretProviderClass: kedro-s3-paths-spc
-      tolerations:
-        - key: node-group
-          operator: Equal
-          value: kedro-large
-          effect: "NoSchedule"
-      affinity:
-        nodeAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            nodeSelectorTerms:
-            - matchExpressions:
-              - key: node-group
-                operator: In
-                values:
-                - kedro-large
+        - name: kedro-dev-postgres-2025-yaml-configmap
+          configMap:
+            name: kedro-dev-postgres-2025-yaml-configmap
       restartPolicy: OnFailure
+      serviceAccountName: hmda-platform

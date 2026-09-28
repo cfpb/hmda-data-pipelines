@@ -7,7 +7,7 @@
 # This file 2024 onwards - cbsa_county_name_v2
 pg_cbsa_county_name_{year}:
   type: pandas.SQLQueryDataset
-  sql: "SELECT * FROM hmda_user.cbsa_county_name;"
+  sql: "SELECT * FROM hmda_user.cbsa_county_name_v2;"
   credentials: dev_pg_readonly
   metadata:
     kedro-viz:
@@ -15,7 +15,7 @@ pg_cbsa_county_name_{year}:
 
 pg_lar_{year}:
   type: pandas.SQLQueryDataset
-  sql: "SELECT * FROM hmda_user.loanapplicationregister2022_snapshot_05012023_ext"
+  sql: "SELECT * FROM hmda_user.loanapplicationregister2025_snapshot_06022026;"
   load_args:
     chunksize: 250000
   credentials: dev_pg_readonly
@@ -27,7 +27,7 @@ pg_lar_{year}:
 # the year to the end of the Kedro dataset name for consistency
 pg_institutions_email_domains_{year}:
   type: pandas.SQLQueryDataset
-  sql: "SELECT * FROM hmda_user.institutions_emails_2022_snapshot_05012023_ext;"
+  sql: "SELECT * FROM hmda_user.institutions_emails_snapshot_06022026;"
   credentials: dev_pg_readonly
   metadata:
     kedro-viz:
@@ -39,7 +39,7 @@ pg_lar_counts_by_lei_{year}:
   type: CachedDataset
   dataset:
     type: pandas.SQLQueryDataset
-    sql: "SELECT lei, COUNT(*) FROM hmda_user.loanapplicationregister2022_snapshot_05012023_ext GROUP BY lei;"
+    sql: "SELECT lei, COUNT(*) FROM hmda_user.loanapplicationregister2025_snapshot_06022026 GROUP BY lei;"
     credentials: dev_pg_readonly
   metadata:
     kedro-viz:
@@ -47,7 +47,7 @@ pg_lar_counts_by_lei_{year}:
 
 pg_institutions_{year}:
   type: pandas.SQLQueryDataset
-  sql: "SELECT * FROM hmda_user.institutions2022_snapshot_05012023_ext;"
+  sql: "SELECT * FROM hmda_user.institutions2025_snapshot_06022026;"
   credentials: dev_pg_readonly
   metadata:
     kedro-viz:
@@ -55,7 +55,7 @@ pg_institutions_{year}:
 
 pg_ts_{year}:
   type: pandas.SQLQueryDataset
-  sql: "SELECT * FROM hmda_user.transmittalsheet2022_snapshot_05012023_ext;"
+  sql: "SELECT * FROM hmda_user.transmittalsheet2025_snapshot_06022026;"
   credentials: dev_pg_readonly
   metadata:
     kedro-viz:

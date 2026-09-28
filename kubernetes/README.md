@@ -228,11 +228,15 @@ aws s3 ls  --human-readable s3://xxx/dev/kedro-etl-pipeline/archive-public/2023/
 ```
 
 ## Aggregate and Disclosure Reports (Updated for year 2025)
-- Add year to the all the pipline files to [aggregate_and_disclosure_reports-pipeline](src/hmda_etl_pipeline/pipelines/aggregate_and_disclosure_reports/pipeline.py#12), [data_publisher-piple](src/hmda_etl_pipeline/pipelines/data_publisher/pipeline.py#L33) and [ingest_data_from_pg-pipeline](src/hmda_etl_pipeline/pipelines/ingest_data_from_pg/pipeline.py#L26)
-- Update [dev_postgres.yaml](conf/dev/catalogs/dev_postgres.yaml) with `snapshot` tables
-- Note: [production_postgres.yaml](hmda-etl-pipeline/conf/base/catalogs/production_postgres.yaml) not used
-- See [aggregate and disclosure pipeline file](src/hmda_etl_pipeline/pipelines/aggregate_and_disclosure_reports/pipeline.py) for list of inputs and outputs. 
+- Add `YEAR` to the all the `pipeline` files to   
+[aggregate_and_disclosure_reports-pipeline](../hmda-etl-pipeline/src/hmda_etl_pipeline/pipelines/aggregate_and_disclosure_reports/pipeline.py#12)             
+[data_publisher-piple](../hmda-etl-pipeline/src/hmda_etl_pipeline/pipelines/data_publisher/pipeline.py#L33)                 
+[ingest_data_from_pg-pipeline](../hmda-etl-pipeline/src/hmda_etl_pipeline/pipelines/pipelines/ingest_data_from_pg/pipeline.py#L26)  
+- Update [dev_postgres.yaml](../hmda-etl-pipeline/conf/dev/catalogs/dev_postgres.yaml) with `snapshot` tables
+- *Note*: [production_postgres.yaml](../hmda-etl-pipeline/conf/base/catalogs/production_postgres.yaml) not used
+- See [aggregate_and_disclosure_reports-pipeline](../hmda-etl-pipeline/src/hmda_etl_pipeline/pipelines/aggregate_and_disclosure_reports/pipeline.py) for list of inputs and outputs. 
 - Wiki page most update info for [local report generation](https://github.com/cfpb/hmda-data-pipelines/wiki/A&D-Report-Local-Generation)
+- For year `2022` aggregate reports r6a.8xlarge instance type required
 
 #### Secerts/Configmaps in secretmanager
 ```
@@ -260,7 +264,7 @@ s3://$BUCKET/stg/kedro-etl-pipeline/regulator/2025/institutions/01_raw/latest/in
 s3://$BUCKET/stg/kedro-etl-pipeline/regulator/2025/institutions/02_data_publication/latest_2025_panel.txt
 ```
 
-##### Step 3) Generate reduced LAR input file (Run once per year)
+##### Step 3) Generate reduced LAR input file (Run once per year) - approx 40 min
 - Apply kedro job for reduced LAR
 - Run on `kedro-large` node
 - Confirm that S3 contains the reduced LAR parquet file for that year. The exact S3 filepath can be found in the job's logs, along with the number of rows in the dataset.

@@ -29,7 +29,7 @@ def withkwargs(func, **kwargs):
     ft.update_wrapper(wrapper, func)
     return wrapper
 
-
+#  Add new  year
 for year in (2019, 2020, 2021, 2022, 2023, 2024, 2025):
     nodes += [
         # Create regulator LAR flat file
